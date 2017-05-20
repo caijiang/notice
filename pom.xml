@@ -12,7 +12,6 @@
     <modules>
         <module>notice-api</module>
         <module>sms-zjy</module>
-        <module>sms-dhst</module>
     </modules>
 
     <description>
