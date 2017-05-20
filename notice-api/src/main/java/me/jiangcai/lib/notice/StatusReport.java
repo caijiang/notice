@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class StatusReport {
 
-    private final SubNoticeService subNoticeService;
+    private final NoticeSupplier noticeSupplier;
     private final Object data;
 
 }

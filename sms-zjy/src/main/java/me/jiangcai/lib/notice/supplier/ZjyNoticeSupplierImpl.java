@@ -1,14 +1,14 @@
-package me.jiangcai.lib.notice.locate;
+package me.jiangcai.lib.notice.supplier;
 
 import me.jiangcai.lib.notice.Content;
 import me.jiangcai.lib.notice.StatusReport;
-import me.jiangcai.lib.notice.SubNoticeService;
 import me.jiangcai.lib.notice.To;
-import me.jiangcai.lib.notice.dhst.Fee;
-import me.jiangcai.lib.notice.dhst.FeeHandler;
-import me.jiangcai.lib.notice.dhst.SendResult;
-import me.jiangcai.lib.notice.dhst.SendResultHandler;
+import me.jiangcai.lib.notice.ZjyNoticeSupplier;
 import me.jiangcai.lib.notice.exception.NoticeException;
+import me.jiangcai.lib.notice.zjy.Fee;
+import me.jiangcai.lib.notice.zjy.FeeHandler;
+import me.jiangcai.lib.notice.zjy.SendResult;
+import me.jiangcai.lib.notice.zjy.SendResultHandler;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.NameValuePair;
@@ -29,17 +29,16 @@ import java.net.URLEncoder;
  * @author CJ
  */
 @Service
-public class ZjySubNoticeService implements SubNoticeService {
-    private static final Log log = LogFactory.getLog(ZjySubNoticeService.class);
+public class ZjyNoticeSupplierImpl implements ZjyNoticeSupplier {
+    private static final Log log = LogFactory.getLog(ZjyNoticeSupplierImpl.class);
     private final String urlRoot;
     private final String username;
     private final String password;
 
-    @Autowired
-    private ApplicationEventPublisher applicationEventPublisher;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Autowired
-    public ZjySubNoticeService(Environment environment) {
+    public ZjyNoticeSupplierImpl(Environment environment, ApplicationEventPublisher applicationEventPublisher) {
         String value = environment.getProperty("me.jiangcai.zjy.root", "http://www.zjysms.com/");
         if (value.endsWith("/")) {
             urlRoot = value;
@@ -47,6 +46,7 @@ public class ZjySubNoticeService implements SubNoticeService {
             urlRoot = value + "/";
         username = environment.getProperty("me.jiangcai.zjy.username", (String) null);
         password = environment.getProperty("me.jiangcai.zjy.password", (String) null);
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     public boolean working() {

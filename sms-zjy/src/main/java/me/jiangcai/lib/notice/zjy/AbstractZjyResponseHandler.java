@@ -1,4 +1,4 @@
-package me.jiangcai.lib.notice.dhst;
+package me.jiangcai.lib.notice.zjy;
 
 import me.jiangcai.lib.notice.exception.NoticeException;
 import org.apache.commons.logging.Log;
