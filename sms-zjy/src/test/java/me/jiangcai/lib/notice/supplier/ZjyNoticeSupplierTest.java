@@ -16,6 +16,8 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.event.EventListener;
 import org.springframework.test.context.ContextConfiguration;
 
+import java.util.Map;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -65,6 +67,21 @@ public class ZjyNoticeSupplierTest extends SpringWebTest {
 //                return "您好，您的验证码是" + UUID.randomUUID().toString().substring(0, 5) + "，请勿泄露给他人。";
 //                return "您的款爷帐号和所有申请都已经注销；如需继续使用款爷请重新注册。";
                     return "尊敬的文君，您在款爷网商宝的申请已撤销。祝您生活愉快";
+                }
+
+                @Override
+                public String signName() {
+                    return null;
+                }
+
+                @Override
+                public String templateName() {
+                    return null;
+                }
+
+                @Override
+                public Map<String, ?> templateParameters() {
+                    return null;
                 }
             });
         }
