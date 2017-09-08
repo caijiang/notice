@@ -7,11 +7,13 @@
     <groupId>me.jiangcai.lib.notice</groupId>
     <artifactId>notice</artifactId>
     <packaging>pom</packaging>
-    <version>2.0-SNAPSHOT</version>
+    <version>3.0-SNAPSHOT</version>
 
     <modules>
         <module>notice-api</module>
         <module>sms-zjy</module>
+        <module>sms-aliyun</module>
+        <module>aliyun-java-sdk-dysmsapi</module>
     </modules>
 
     <description>
