@@ -39,7 +39,7 @@ public class AliyunNoticeSupplierTest extends SpringWebTest {
 
             @Override
             public String templateName() {
-                return "SMS-1000";
+                return "SMS_94740068";
             }
 
             @Override
