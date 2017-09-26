@@ -10,6 +10,7 @@ import com.aliyuncs.profile.IClientProfile;
 import me.jiangcai.lib.notice.AliyunNoticeSupplier;
 import me.jiangcai.lib.notice.Content;
 import me.jiangcai.lib.notice.To;
+import me.jiangcai.lib.notice.exception.BadToException;
 import me.jiangcai.lib.notice.exception.NoticeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -81,6 +82,8 @@ public class AliyunNoticeSupplierImpl implements AliyunNoticeSupplier {
         try {
             SendSmsResponse response = acsClient.getAcsResponse(request);
             if (!response.getCode().equalsIgnoreCase("OK")) {
+                if (response.getMessage().startsWith("触发"))
+                    throw new BadToException(response.getMessage(), to);
                 throw new NoticeException(response.getRequestId() + ":" + response.getMessage());
             }
         } catch (ClientException e) {
