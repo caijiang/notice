@@ -7,7 +7,7 @@
     <parent>
         <artifactId>notice</artifactId>
         <groupId>me.jiangcai.lib.notice</groupId>
-        <version>3.1</version>
+        <version>3.2</version>
     </parent>
 
 
