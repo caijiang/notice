@@ -5,7 +5,6 @@ import me.jiangcai.lib.notice.NoticeService;
 import me.jiangcai.lib.notice.NoticeSpringConfig;
 import me.jiangcai.lib.notice.StatusReport;
 import me.jiangcai.lib.notice.To;
-import me.jiangcai.lib.notice.zjy.Fee;
 import me.jiangcai.lib.test.SpringWebTest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -28,7 +27,7 @@ public class ZjyNoticeSupplierTest extends SpringWebTest {
 
     private static final Log log = LogFactory.getLog(ZjyNoticeSupplierTest.class);
 
-    private static Fee fee;
+    private static Object fee;
     @Autowired
     private NoticeService noticeService;
 
@@ -101,7 +100,7 @@ public class ZjyNoticeSupplierTest extends SpringWebTest {
     static class Config {
         @EventListener
         public void status(StatusReport statusReport) {
-            fee = (Fee) statusReport.getData();
+            fee = statusReport.getData();
             log.debug(statusReport);
         }
     }
