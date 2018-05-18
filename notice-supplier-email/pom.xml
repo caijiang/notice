@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>notice-supplier-email</artifactId>
+    <version>4.0.1</version>
 
     <dependencies>
         <dependency>
@@ -20,7 +21,7 @@
         <dependency>
             <groupId>me.jiangcai.lib.notice</groupId>
             <artifactId>notice-api</artifactId>
-            <version>${project.version}</version>
+            <version>${parent.version}</version>
         </dependency>
         <dependency>
             <groupId>me.jiangcai.lib</groupId>

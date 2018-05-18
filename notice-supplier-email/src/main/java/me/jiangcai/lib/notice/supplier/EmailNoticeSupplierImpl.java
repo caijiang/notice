@@ -104,10 +104,13 @@ public class EmailNoticeSupplierImpl implements EmailNoticeSupplier {
 
             // 系统信息
             email.setHostName(host);
-            if (!StringUtils.isEmpty(sslPort))
+            if (!StringUtils.isEmpty(sslPort)) {
                 email.setSslSmtpPort(sslPort);
-            else
+                email.setSSLOnConnect(true);
+            } else {
                 email.setSmtpPort(NumberUtils.parseNumber(port, Integer.class));
+                email.setSSLOnConnect(false);
+            }
             if (!StringUtils.isEmpty(username))
                 email.setAuthentication(username, password);
             email.setFrom(fromEmail.getEmail(), fromEmail.getName(), "UTF-8");
