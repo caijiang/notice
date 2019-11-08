@@ -4,8 +4,7 @@ import me.jiangcai.lib.notice.email.EmailAddress;
 import me.jiangcai.lib.test.SpringWebTest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -16,19 +15,23 @@ import java.io.OutputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 /**
  * @author CJ
  */
-@ContextConfiguration(classes = {EmailNoticeSupplierTest.Config.class, NoticeSpringConfig.class})
+@ContextConfiguration(classes = {NoticeSpringConfig.class})
 public class EmailNoticeSupplierTest extends SpringWebTest {
 
     @Autowired
-    private EmailNoticeSupplier emailNoticeSupplier;
+    private ApplicationContext applicationContext;
 
     @Test
-    public void go() {
+    public void go() throws IOException {
+        Properties ps = new Properties();
+        ps.load(new ClassPathResource("email_test.properties").getInputStream());
+        EmailNoticeSupplier emailNoticeSupplier = applicationContext.getBean(EmailNoticeSupplier.class, ps);
         System.out.println(emailNoticeSupplier);
         emailNoticeSupplier.send(new To() {
             @Override
@@ -123,10 +126,10 @@ public class EmailNoticeSupplierTest extends SpringWebTest {
         });
     }
 
-    @Configuration
-    @PropertySource("classpath:/email_test.properties")
-    public static class Config {
-
-    }
+//    @Configuration
+//    @PropertySource("classpath:/email_test.properties")
+//    public static class Config {
+//
+//    }
 
 }

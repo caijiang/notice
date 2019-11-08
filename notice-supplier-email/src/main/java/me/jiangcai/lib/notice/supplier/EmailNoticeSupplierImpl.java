@@ -7,8 +7,8 @@ import me.jiangcai.lib.notice.email.EmailAddress;
 import me.jiangcai.lib.notice.exception.NoticeException;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.NumberUtils;
@@ -18,15 +18,17 @@ import javax.activation.DataSource;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 
 /**
  * @author CJ
  */
+@SuppressWarnings("unused")
 @Service
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class EmailNoticeSupplierImpl implements EmailNoticeSupplier {
 
-    private final Environment environment;
     private final String host;
     private final String sslPort;
     private final String port;
@@ -34,23 +36,22 @@ public class EmailNoticeSupplierImpl implements EmailNoticeSupplier {
     private final String password;
     private final EmailAddress fromEmail;
 
-    @Autowired
-    public EmailNoticeSupplierImpl(Environment environment) {
-        this.environment = environment;
-        host = environment.getRequiredProperty("me.jiangcai.lib.notice.email.smtp.host");
-        sslPort = environment.getProperty("me.jiangcai.lib.notice.email.smtp.sslPort");
+    public EmailNoticeSupplierImpl(Properties environment) {
+//        this.environment = environment;
+        host = environment.getProperty("smtp.host");
+        sslPort = environment.getProperty("smtp.sslPort");
         String port;
         if (StringUtils.isEmpty(sslPort)) {
-            port = environment.getRequiredProperty("me.jiangcai.lib.notice.email.smtp.port");
+            port = environment.getProperty("smtp.port");
         } else {
-            port = environment.getProperty("me.jiangcai.lib.notice.email.smtp.port");
+            port = environment.getProperty("smtp.port");
         }
         this.port = port;
-        this.username = environment.getProperty("me.jiangcai.lib.notice.email.smtp.username");
-        this.password = environment.getProperty("me.jiangcai.lib.notice.email.smtp.password");
+        this.username = environment.getProperty("smtp.username");
+        this.password = environment.getProperty("smtp.password");
         this.fromEmail = new EmailAddress(
-                environment.getRequiredProperty("me.jiangcai.lib.notice.email.from.name")
-                , environment.getRequiredProperty("me.jiangcai.lib.notice.email.from.email")
+                environment.getProperty("from.name")
+                , environment.getProperty("from.email")
         );
     }
 

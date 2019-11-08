@@ -22,16 +22,16 @@ public interface NoticeService {
     /**
      * 通过服务定位器发送通知
      *
-     * @param supplierInterface 供应商接口全限定类名；必须在Spring bean中
-     * @param to                收件人
-     * @param content           内容
+     * @param sender  发送者
+     * @param to      收件人
+     * @param content 内容
      * @throws NoticeException       供应商异常
      * @throws IllegalStateException 找不到供应商
      */
-    void send(String supplierInterface, To to, Content content) throws NoticeException, IllegalStateException, ClassNotFoundException;
+    void send(NoticeSender sender, To to, Content content) throws NoticeException, IllegalStateException, ClassNotFoundException;
 
     void status();
 
-    void status(String supplierInterface) throws ClassNotFoundException;
+    void status(NoticeSender sender) throws ClassNotFoundException;
 
 }

@@ -9,8 +9,6 @@ import me.jiangcai.lib.notice.To;
 import me.jiangcai.lib.notice.ZjyNoticeSupplier;
 import me.jiangcai.lib.notice.exception.NoticeException;
 import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.EntityBuilder;
 import org.apache.http.client.methods.HttpGet;
@@ -20,17 +18,20 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.core.env.Environment;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Properties;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -38,18 +39,17 @@ import java.util.stream.Stream;
  * @author CJ
  */
 @Service
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ZjyNoticeSupplierImpl implements ZjyNoticeSupplier {
-    private static final Log log = LogFactory.getLog(ZjyNoticeSupplierImpl.class);
 
-    private final ApplicationEventPublisher applicationEventPublisher;
+    @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
     private final String customerId;
     private final String key;
 
-    @Autowired
-    public ZjyNoticeSupplierImpl(Environment environment, ApplicationEventPublisher applicationEventPublisher) {
-        customerId = environment.getProperty("me.jiangcai.zyj.cid");
-        key = environment.getProperty("me.jiangcai.zyj.key");
-        this.applicationEventPublisher = applicationEventPublisher;
+    public ZjyNoticeSupplierImpl(Properties environment) {
+        customerId = environment.getProperty("zyj.cid");
+        key = environment.getProperty("zyj.key");
     }
 
     public boolean working() {
@@ -97,10 +97,10 @@ public class ZjyNoticeSupplierImpl implements ZjyNoticeSupplier {
             throw new IllegalArgumentException("unsupported for " + methodName);
     }
 
-    @SneakyThrows({NoSuchAlgorithmException.class, UnsupportedEncodingException.class})
+    @SneakyThrows({NoSuchAlgorithmException.class})
     private String sign(String toKey) {
         return new String(Hex.encodeHex(MessageDigest.getInstance("SHA1").digest((toKey + key)
-                .getBytes("UTF-8")), true));
+                .getBytes(StandardCharsets.UTF_8)), true));
     }
 
     private String toDist(To... tos) {

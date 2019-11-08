@@ -1,6 +1,7 @@
 package me.jiangcai.lib.notice.service;
 
 import me.jiangcai.lib.notice.Content;
+import me.jiangcai.lib.notice.NoticeSender;
 import me.jiangcai.lib.notice.NoticeService;
 import me.jiangcai.lib.notice.NoticeSupplier;
 import me.jiangcai.lib.notice.To;
@@ -36,16 +37,15 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
-    public void send(String supplierInterface, To to, Content content) throws NoticeException, IllegalStateException, ClassNotFoundException {
-        checkSupplier(supplierInterface);
-        send(to, content);
+    public void send(NoticeSender sender, To to, Content content) throws NoticeException, IllegalStateException, ClassNotFoundException {
+        doSend(sender.toNoticeSupplier(), to, content);
     }
 
-    private void checkSupplier(String clazz) throws ClassNotFoundException {
-        @SuppressWarnings("unchecked")
-        Class<? extends NoticeSupplier> type = (Class<? extends NoticeSupplier>) Class.forName(clazz);
-        lastSupplier = applicationContext.getBean(type);
-    }
+//    private void checkSupplier(String clazz) throws ClassNotFoundException {
+//        @SuppressWarnings("unchecked")
+//        Class<? extends NoticeSupplier> type = (Class<? extends NoticeSupplier>) Class.forName(clazz);
+//        lastSupplier = applicationContext.getBean(type);
+//    }
 
     @Override
     public void status() {
@@ -58,9 +58,12 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
-    public void status(String supplierInterface) throws ClassNotFoundException {
-        checkSupplier(supplierInterface);
-        status();
+    public void status(NoticeSender sender) {
+        try {
+            sender.toNoticeSupplier().statusReport();
+        } catch (IOException e) {
+            throw new NoticeException(e);
+        }
     }
 
     private void doSend(NoticeSupplier noticeSupplier, To to, Content content) throws NoticeException {

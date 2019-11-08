@@ -12,16 +12,18 @@ import me.jiangcai.lib.notice.Content;
 import me.jiangcai.lib.notice.To;
 import me.jiangcai.lib.notice.exception.BadToException;
 import me.jiangcai.lib.notice.exception.NoticeException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Properties;
 
 /**
  * @author CJ
  */
 @Service
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class AliyunNoticeSupplierImpl implements AliyunNoticeSupplier {
 
     //产品名称:云通信短信API产品,开发者无需替换
@@ -30,10 +32,10 @@ public class AliyunNoticeSupplierImpl implements AliyunNoticeSupplier {
     private static final String domain = "dysmsapi.aliyuncs.com";
     private final IAcsClient acsClient;
 
-    @Autowired
-    public AliyunNoticeSupplierImpl(Environment environment) throws ClientException {
-        String accessKeyId = environment.getRequiredProperty("com.aliyun.ram.accessKeyId");
-        String accessKeySecret = environment.getRequiredProperty("com.aliyun.ram.accessKeySecret");
+    //    @Autowired
+    public AliyunNoticeSupplierImpl(Properties environment) throws ClientException {
+        String accessKeyId = environment.getProperty("com.aliyun.ram.accessKeyId");
+        String accessKeySecret = environment.getProperty("com.aliyun.ram.accessKeySecret");
         String regionId = environment.getProperty("com.aliyun.ram.regionId", "cn-hangzhou");
 
         IClientProfile profile = DefaultProfile.getProfile(regionId, accessKeyId, accessKeySecret);
