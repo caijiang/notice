@@ -28,7 +28,7 @@ public interface NoticeService {
      * @throws NoticeException       供应商异常
      * @throws IllegalStateException 找不到供应商
      */
-    void send(NoticeSender sender, To to, Content content) throws NoticeException, IllegalStateException, ClassNotFoundException;
+    void send(NoticeSender sender, To to, Content content) throws NoticeException, IllegalStateException;
 
     void status();
 

@@ -6,8 +6,7 @@ import me.jiangcai.lib.notice.NoticeService;
 import me.jiangcai.lib.notice.NoticeSupplier;
 import me.jiangcai.lib.notice.To;
 import me.jiangcai.lib.notice.exception.NoticeException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
+import me.jiangcai.lib.notice.std.StdNoticeSender;
 
 import java.io.IOException;
 
@@ -15,29 +14,28 @@ import java.io.IOException;
  * @author CJ
  */
 public class NoticeServiceImpl implements NoticeService {
-    private final ApplicationContext applicationContext;
-    private NoticeSupplier lastSupplier;
+//    private final ApplicationContext applicationContext;
+//    private NoticeSupplier lastSupplier;
 
-    @Autowired
-    public NoticeServiceImpl(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
-    }
+//    @Autowired
+//    public NoticeServiceImpl(ApplicationContext applicationContext) {
+//        this.applicationContext = applicationContext;
+//    }
 
     @Override
     public void send(To to, Content content) throws NoticeException, IllegalStateException {
-        checkSupplier();
-
-        doSend(lastSupplier, to, content);
+//        checkSupplier();
+        send(new StdNoticeSender(), to, content);
     }
 
-    private void checkSupplier() {
-        if (lastSupplier == null) {
-            lastSupplier = applicationContext.getBean(NoticeSupplier.class);
-        }
-    }
+//    private void checkSupplier() {
+//        if (lastSupplier == null) {
+//            lastSupplier = applicationContext.getBean(NoticeSupplier.class);
+//        }
+//    }
 
     @Override
-    public void send(NoticeSender sender, To to, Content content) throws NoticeException, IllegalStateException, ClassNotFoundException {
+    public void send(NoticeSender sender, To to, Content content) throws NoticeException, IllegalStateException {
         doSend(sender.toNoticeSupplier(), to, content);
     }
 
@@ -49,12 +47,7 @@ public class NoticeServiceImpl implements NoticeService {
 
     @Override
     public void status() {
-        checkSupplier();
-        try {
-            lastSupplier.statusReport();
-        } catch (IOException e) {
-            throw new NoticeException(e);
-        }
+        status(new StdNoticeSender());
     }
 
     @Override

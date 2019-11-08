@@ -8,6 +8,7 @@
         <version>5.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
+    <version>5.1</version>
 
     <artifactId>notice-api</artifactId>
     <dependencies>
