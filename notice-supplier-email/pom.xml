@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>notice-supplier-email</artifactId>
-    <version>4.0.1</version>
+    <version>5.0</version>
 
     <dependencies>
         <dependency>
